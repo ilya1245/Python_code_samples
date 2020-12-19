@@ -1,0 +1,12 @@
+exec:
+  section: camel
+  run_id: '008'
+  mode: build
+  data_folder: data
+  data_file: full_numpy_bitmap_camel.npy
+
+
+
+
+
+
