@@ -24,3 +24,14 @@ class LinearRegressionV2(tf.keras.Model):
     @tf.function
     def call(self, x):
         return tf.linalg.matmul(x, self._weights)
+
+
+class LinearRegressionV3(tf.keras.Model):
+    def __init__(self, num_parameters, **kwargs):
+        super().__init__(**kwargs)
+        self._weights = tf.Variable(tf.random.uniform((num_parameters, 1)), dtype=tf.float32)
+        self._bias = tf.Variable([100], dtype=tf.float32)
+
+    @tf.function
+    def call(self, x):
+        return tf.linalg.matmul(x, self._weights) + self._bias
