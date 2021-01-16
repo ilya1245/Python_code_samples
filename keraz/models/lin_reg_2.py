@@ -1,7 +1,7 @@
 import time
 import tensorflow as tf
 from pprint import pprint
-import keraz.models.reg_classes as cls
+import keraz.models.classes as cls
 
 tf.random.set_seed(42)
 true_weights = tf.constant(list(range(5)), dtype=tf.float32)[:, tf.newaxis]
@@ -29,8 +29,8 @@ model = cls.LinearRegressionV2(5)
 t0 = time.time()
 for iteration in range(1001):
     loss = train_step()
-if not (iteration % 200):
-    print('mean squared loss at iteration {:4d} is {:5.4f}'.format(iteration, loss))
+    if not (iteration % 200):
+        print('mean squared loss at iteration {:4d} is {:5.4f}'.format(iteration, loss))
 
 pprint(model.variables)
 print('time took: {} seconds'.format(time.time() - t0))

@@ -1,7 +1,7 @@
 import time
 import tensorflow as tf
 from pprint import pprint
-import keraz.models.classes as cls
+import keraz.layers.classes as cls
 
 tf.random.set_seed(42)
 true_weights = tf.constant(list(range(5)), dtype=tf.float32)[:, tf.newaxis]
@@ -9,27 +9,26 @@ x = tf.constant(tf.random.uniform((32, 5)), dtype=tf.float32)
 y = tf.constant(x @ true_weights, dtype=tf.float32)
 
 weights = tf.Variable(tf.random.uniform((5, 1)), dtype=tf.float32)
-y_hat = tf.linalg.matmul(x, weights)
-
-model = cls.LinearRegressionV1(5)
-print('Use model_1')
 
 
 @tf.function
-def train_step():
+def train_step(model):
     with tf.GradientTape() as tape:
         y_hat = model(x)
         loss = tf.reduce_mean(tf.square(y - y_hat))
+    # gradient means derivative of a function (loss) for vars (model.variables)
     gradients = tape.gradient(loss, model.variables)
-    model.variables.assign_add(tf.constant([-0.05], dtype=tf.float32) * gradients)
+    for g, v in zip(gradients, model.variables):
+        v.assign_add(tf.constant([-0.05], dtype=tf.float32) * g)
     return loss
 
 
-t0 = time.time()
+model = cls.RegressionV2([5, 3], [3, 1])
 for iteration in range(1001):
-    loss = train_step()
+    loss = train_step(model)
     if not (iteration % 200):
         print('mean squared loss at iteration {:4d} is {:5.4f}'.format(iteration, loss))
 
+print()
 pprint(model.variables)
-print('time took: {} seconds'.format(time.time() - t0))
+print('Mean absolute error is: ', tf.reduce_mean(tf.abs(y - model(x))).numpy())
