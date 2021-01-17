@@ -90,3 +90,14 @@ class RegressionV3(tf.keras.Model):
         for layer in self._layers:
             x = layer(x)
         return x
+
+class RegressionD(tf.keras.Model):
+    def __init__(self, units, **kwargs):
+        super().__init__(**kwargs)
+        self._layers = [tf.keras.layers.Dense(unit, use_bias=False) for unit in units] # the only change
+
+    @tf.function
+    def call(self, x):
+        for layer in self._layers:
+            x = layer(x)
+        return x
