@@ -2,6 +2,7 @@ import time
 import tensorflow as tf
 from pprint import pprint
 import keraz.layers.classes as cls
+from functools import reduce
 
 tf.random.set_seed(42)
 true_weights = tf.constant(list(range(5)), dtype=tf.float32)[:, tf.newaxis]
@@ -17,3 +18,8 @@ for iteration in range(1001):
 print()
 pprint(model.variables)
 print('Mean absolute error is: ', tf.reduce_mean(tf.abs(y - model(x))).numpy())
+
+print()
+reduced_model = reduce(tf.linalg.matmul, model.variables)  # brings model with weights 0, 1, 2, 3, 4
+print(reduced_model)
+print(tf.reduce_all(tf.abs(model(x) - x @ reduced_model) < 1e-6))
