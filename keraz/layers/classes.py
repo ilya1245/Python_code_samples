@@ -38,8 +38,11 @@ class LinearV2(tf.keras.layers.Layer):
 class RegressionV2(tf.keras.Model):
     def __init__(self, num_inputs_per_layer, num_outputs_per_layer, **kwargs):
         super().__init__(**kwargs)
-        self._layers = [LinearV2(num_inputs, num_outputs) for (num_inputs, num_outputs) in
-                        zip(num_inputs_per_layer, num_outputs_per_layer)]
+
+        # Two variants
+        # self._layers = [LinearV2(_in, _out) for (_in, _out) in
+        #                 zip(num_inputs_per_layer, num_outputs_per_layer)]
+        self._layers = [LinearV2(_w[0], _w[1]) for _w in [num_inputs_per_layer, num_outputs_per_layer]]
 
     @tf.function
     def call(self, x):

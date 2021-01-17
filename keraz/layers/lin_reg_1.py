@@ -8,8 +8,6 @@ true_weights = tf.constant(list(range(5)), dtype=tf.float32)[:, tf.newaxis]
 x = tf.constant(tf.random.uniform((32, 5)), dtype=tf.float32)
 y = tf.constant(x @ true_weights, dtype=tf.float32)
 
-weights = tf.Variable(tf.random.uniform((5, 1)), dtype=tf.float32)
-
 
 @tf.function
 def train_step(model):
