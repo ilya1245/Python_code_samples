@@ -3,6 +3,18 @@ import tensorflow as tf
 print(tf.__version__)
 
 
+@tf.function
+def train_step(x, y, model):
+    with tf.GradientTape() as tape:
+        y_hat = model(x)
+        loss = tf.reduce_mean(tf.square(y - y_hat))
+    # gradient means derivative of a function (loss) for vars (model.variables)
+    gradients = tape.gradient(loss, model.variables)
+    for g, v in zip(gradients, model.variables):
+        v.assign_add(tf.constant([-0.05], dtype=tf.float32) * g)
+    return loss
+
+
 class LinearV1(tf.keras.layers.Layer):
     def __init__(self, num_inputs, **kwargs):
         super().__init__(**kwargs)
@@ -43,6 +55,35 @@ class RegressionV2(tf.keras.Model):
         # self._layers = [LinearV2(_in, _out) for (_in, _out) in
         #                 zip(num_inputs_per_layer, num_outputs_per_layer)]
         self._layers = [LinearV2(_w[0], _w[1]) for _w in [num_inputs_per_layer, num_outputs_per_layer]]
+
+    @tf.function
+    def call(self, x):
+        for layer in self._layers:
+            x = layer(x)
+        return x
+
+
+# It is not clear, why RegressionV3 generates weights that different from RegressionV2
+class LinearV3(tf.keras.layers.Layer):
+    def __init__(self, unit, **kwargs):
+        super(LinearV3, self).__init__(**kwargs)
+        self.unit = unit
+
+    def build(self, input_shape):
+        self._weights = self.add_weight(shape=(input_shape[1], self.unit))
+        # Works fine without super.build. Is is optional for subclasses
+        # super().build(input_shape)
+
+    @tf.function
+    def call(self, x):
+        output = tf.linalg.matmul(x, self._weights)
+        return output
+
+
+class RegressionV3(tf.keras.Model):
+    def __init__(self, units, **kwargs):
+        super().__init__(**kwargs)
+        self._layers = [LinearV3(unit) for unit in units]
 
     @tf.function
     def call(self, x):

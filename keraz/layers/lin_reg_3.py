@@ -8,7 +8,7 @@ true_weights = tf.constant(list(range(5)), dtype=tf.float32)[:, tf.newaxis]
 x = tf.constant(tf.random.uniform((32, 5)), dtype=tf.float32)
 y = tf.constant(x @ true_weights, dtype=tf.float32)
 
-model = cls.RegressionV2([5, 3], [3, 1])
+model = cls.RegressionV3([3, 1])
 for iteration in range(1001):
     loss = cls.train_step(x, y, model)
     if not (iteration % 200):
