@@ -1,19 +1,5 @@
 import tensorflow as tf
 
-print(tf.__version__)
-
-
-@tf.function
-def train_step(x, y, model):
-    with tf.GradientTape() as tape:
-        y_hat = model(x)
-        loss = tf.reduce_mean(tf.square(y - y_hat))
-    # gradient means derivative of a function (loss) for vars (model.variables)
-    gradients = tape.gradient(loss, model.variables)
-    for g, v in zip(gradients, model.variables):
-        v.assign_add(tf.constant([-0.05], dtype=tf.float32) * g)
-    return loss
-
 
 class LinearV1(tf.keras.layers.Layer):
     def __init__(self, num_inputs, **kwargs):
@@ -91,10 +77,11 @@ class RegressionV3(tf.keras.Model):
             x = layer(x)
         return x
 
+
 class RegressionD(tf.keras.Model):
     def __init__(self, units, **kwargs):
         super().__init__(**kwargs)
-        self._layers = [tf.keras.layers.Dense(unit, use_bias=False) for unit in units] # the only change
+        self._layers = [tf.keras.layers.Dense(unit, use_bias=False) for unit in units]  # the only change
 
     @tf.function
     def call(self, x):

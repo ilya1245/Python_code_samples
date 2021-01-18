@@ -2,6 +2,7 @@ import time
 import tensorflow as tf
 from pprint import pprint
 import keraz.layers.classes as cls
+from keraz.common import train_step
 
 tf.random.set_seed(42)
 true_weights = tf.constant(list(range(5)), dtype=tf.float32)[:, tf.newaxis]
@@ -10,7 +11,7 @@ y = tf.constant(x @ true_weights, dtype=tf.float32)
 
 model = cls.RegressionV1([5, 1])
 for iteration in range(5001):
-    loss = cls.train_step(x, y, model)
+    loss = train_step(x, y, model)
     if not (iteration % 1000):
         print('mean squared loss at iteration {:4d} is {:5.4f}'.format(iteration, loss))
 
