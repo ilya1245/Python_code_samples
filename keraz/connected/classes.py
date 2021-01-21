@@ -18,8 +18,8 @@ class MLP(tf.keras.Model):
     def __init__(self, num_hidden_units, num_targets, hidden_activation='relu', **kwargs):
         super().__init__(**kwargs)
         if type(num_hidden_units) is int: num_hidden_units = [num_hidden_units]
-        self.feature_extractor = Sequential([tf.keras.layers.Dense(unit, activation=hidden_activation)
-                                             for unit in num_hidden_units])
+        self.feature_extractor = Sequential([tf.keras.layers.Dense(units, activation=hidden_activation)
+                                             for units in num_hidden_units])
         self.last_linear = tf.keras.layers.Dense(num_targets, activation='linear')
 
     @tf.function

@@ -8,7 +8,6 @@ from pprint import pprint
 from keraz.common import train_step
 from keraz.connected.classes import MLP
 
-
 (x_tr, y_tr), (x_te, y_te) = tf.keras.datasets.boston_housing.load_data()
 y_tr, y_te = map(lambda x: np.expand_dims(x, -1), (y_tr, y_te))
 x_tr, y_tr, x_te, y_te = map(lambda x: tf.cast(x, tf.float32), (x_tr, y_tr, x_te, y_te))
@@ -17,6 +16,7 @@ x_tr, y_tr, x_te, y_te = map(lambda x: tf.cast(x, tf.float32), (x_tr, y_tr, x_te
 @tf.function
 def test_step(x, y, model):
     return tf.reduce_mean(tf.square(y - model(x)))
+
 
 def train(model, n_epochs=1000, his_freq=10):
     history = []
@@ -31,8 +31,11 @@ def train(model, n_epochs=1000, his_freq=10):
             })
     return model, pd.DataFrame(history)
 
-mlp, mlp_history = train(MLP(4, 1))
+
+mlp, mlp_history = train(MLP([4, 3, 3], 1))
 pprint(mlp_history.tail())
 ax = mlp_history.plot(x='iteration', kind='line', logy=True)
 fig = ax.get_figure()
 fig.savefig('ch3_plot_1.png')
+print()
+print(tf.reduce_mean(tf.square(y_te - tf.reduce_mean(y_te))))
