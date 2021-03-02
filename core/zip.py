@@ -7,6 +7,7 @@ zipped = zip(numbers, letters)
 print(type(zipped))
 l_zip = list(zipped)
 print(l_zip)
+print(*l_zip)
 
 # need to init zipped again
 zipped = zip(numbers, letters)
