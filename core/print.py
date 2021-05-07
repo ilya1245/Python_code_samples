@@ -14,3 +14,8 @@ print('c = %i ' % (c))
 
 s1 = 'a = %s'
 print(s1 % ('qwe'))
+
+# str = '%.0f'  % (a) # %.i can be used
+str = '%.i'  % (a)
+print(str)
+print(f'{a:.0f}')
