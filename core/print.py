@@ -20,3 +20,6 @@ str = '%.i'  % (a)
 print(str)
 print(f'{a:.0f}')
 print(f'{a:.3f}')
+
+t = (4, 5)
+print(f't = {t}')
