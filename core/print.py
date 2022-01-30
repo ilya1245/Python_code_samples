@@ -23,3 +23,6 @@ print(f'{a:.3f}')
 
 t = (4, 5)
 print(f't = {t}')
+
+print('line_1\nline_2')
+print('line_3' + '\n' + 'line_4')
