@@ -17,3 +17,13 @@ for (n, l) in zipped:
 print('--------------------------')
 l_zip_2 = list(zip(*l_zip))
 print(l_zip_2)
+
+# look through the files in zip
+from zipfile import ZipFile
+zipfilename = 'some.zip'
+with ZipFile(zipfilename) as zip:
+    for filename in zip.filelist:
+        with zip.open(filename) as f:
+            for line in f:
+                if "[Result" in str(line):
+                    total += 1
